@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pac-Man</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        canvas { background: #000; display: block; margin: auto; }
+        .controls { position: fixed; bottom: 10px; width: 100%; text-align: center; }
+        button { font-size: 20px; margin: 5px; padding: 10px; }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="480" height="480"></canvas>
+    <div class="controls">
+        <button onclick="move('up')">↑</button>
+        <button onclick="move('left')">←</button>
+        <button onclick="move('right')">→</button>
+        <button onclick="move('down')">↓</button>
+    </div>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const pacSize = 20;
+        let pacX = canvas.width / 2;
+        let pacY = canvas.height / 2;
+        let pacDir = { x: 0, y: 0 };
+
+        function drawPacMan() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            ctx.arc(pacX, pacY, pacSize, 0.2 * Math.PI, 1.8 * Math.PI);
+            ctx.lineTo(pacX, pacY);
+            ctx.fillStyle = 'yellow';
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function move(direction) {
+            switch (direction) {
+                case 'up': pacDir = { x: 0, y: -1 }; break;
+                case 'down': pacDir = { x: 0, y: 1 }; break;
+                case 'left': pacDir = { x: -1, y: 0 }; break;
+                case 'right': pacDir = { x: 1, y: 0 }; break;
+            }
+        }
+
+        function update() {
+            pacX += pacDir.x * 5;
+            pacY += pacDir.y * 5;
+            if (pacX < pacSize) pacX = pacSize;
+            if (pacX > canvas.width - pacSize) pacX = canvas.width - pacSize;
+            if (pacY < pacSize) pacY = pacSize;
+            if (pacY > canvas.height - pacSize) pacY = canvas.height - pacSize;
+            drawPacMan();
+        }
+
+        setInterval(update, 100);
+    </script>
+</body>
+</html>
